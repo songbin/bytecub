@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bytecub.mdm.dao.dal.ProductPoMapper">
+  <resultMap id="BaseResultMap" type="com.bytecub.mdm.dao.po.ProductPo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="transport_list" jdbcType="VARCHAR" property="transportList" />
+    <result column="protocol_code" jdbcType="VARCHAR" property="protocolCode" />
+    <result column="node_type" jdbcType="VARCHAR" property="nodeType" />
+    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+    <result column="log_url" jdbcType="VARCHAR" property="logUrl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+    <result column="product_status" jdbcType="INTEGER" property="productStatus" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+  </resultMap>
+
+
+
+  <resultMap id="ProtocolResultMap" type="com.bytecub.common.domain.dto.response.ProductDetailResDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="protocol_name" jdbcType="VARCHAR" property="protocolName" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="transport_list" jdbcType="VARCHAR" property="transportList" />
+    <result column="protocol_code" jdbcType="VARCHAR" property="protocolCode" />
+    <result column="node_type" jdbcType="VARCHAR" property="nodeType" />
+    <result column="nodeName" jdbcType="VARCHAR" property="nodeName" />
+    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+    <result column="log_url" jdbcType="VARCHAR" property="logUrl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="del_flag" jdbcType="INTEGER" property="delFlag" />
+    <result column="product_status" jdbcType="INTEGER" property="productStatus" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_code, product_name, transport_list, protocol_code, node_type, product_desc,
+    log_url, create_time, update_time, del_flag, product_status, create_by
+  </sql>
+
+
+
+
+
+  <select id="selectByCode" parameterType="java.lang.String" resultMap="ProtocolResultMap">
+    select
+     p.*, pl.protocol_name,
+      CASE
+        WHEN p.node_type = 'DIRECT' THEN '直连设备'
+        WHEN p.node_type = 'SUB' THEN '网关子设备'
+        WHEN p.node_type = 'GATEWAY' THEN '网关设备'
+        END
+        AS nodeName
+    from t_product p
+    LEFT JOIN t_protocol pl on p.protocol_code = pl.protocol_code
+    where product_code = #{code,jdbcType=VARCHAR}
+    limit 1
+  </select>
+
+
+
+
+
+  <select id="listAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product
+    where
+    1 = 1
+    <if test="delFlag != null">
+      AND del_flag = #{delFlag,jdbcType=INTEGER}
+    </if>
+    <if test="status != null">
+      AND product_status = #{status,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="selectByUnion" parameterType="com.bytecub.mdm.dao.po.ProductPo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product
+    where
+    1 = 1
+    <if test="productCode != null">
+      AND product_code = #{productCode,jdbcType=VARCHAR}
+    </if>
+    <if test="productName != null">
+      AND product_name = #{productName,jdbcType=VARCHAR}
+    </if>
+    <if test="transportList != null">
+      AND transport_list = #{transportList,jdbcType=VARCHAR}
+    </if>
+    <if test="protocolCode != null">
+      AND protocol_code = #{protocolCode,jdbcType=VARCHAR}
+    </if>
+    <if test="nodeType != null">
+      AND node_type = #{nodeType,jdbcType=VARCHAR}
+    </if>
+    <if test="productDesc != null">
+      AND product_desc = #{productDesc,jdbcType=VARCHAR}
+    </if>
+    <if test="logUrl != null">
+      AND log_url = #{logUrl,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+      AND create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+      AND update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="delFlag != null">
+      AND del_flag = #{delFlag,jdbcType=INTEGER}
+    </if>
+    <if test="productStatus != null">
+      AND product_status = #{productStatus,jdbcType=INTEGER}
+    </if>
+    <if test="createBy != null">
+      AND create_by = #{createBy,jdbcType=BIGINT}
+    </if>
+  </select>
+
+  <select id="searchByName"   resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product
+    where del_flag = 0
+    <if test="name != null">
+      AND product_name like CONCAT(CONCAT('%',#{name},'%'))
+    </if>
+    order by id DESC
+    limit #{startId,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}
+  </select>
+
+  <select id="countByName"   resultType="java.lang.Long">
+    select
+    count(id)
+    from t_product
+    where del_flag = 0
+    <if test="name != null">
+      AND product_name like CONCAT(CONCAT('%',#{name},'%'))
+    </if>
+
+  </select>
+</mapper>

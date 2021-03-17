@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bytecub.mdm.dao.dal.DevicePoMapper">
+    <resultMap id="BaseResultMap" type="com.bytecub.mdm.dao.po.DevicePo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="device_code" jdbcType="VARCHAR" property="deviceCode"/>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="gw_dev_code" jdbcType="VARCHAR" property="gwDevCode"/>
+        <result column="product_code" jdbcType="VARCHAR" property="productCode"/>
+        <result column="device_secret" jdbcType="VARCHAR" property="deviceSecret"/>
+        <result column="firmware_version" jdbcType="VARCHAR" property="firmwareVersion"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="enable_status" jdbcType="INTEGER" property="enableStatus"/>
+        <result column="active_status" jdbcType="INTEGER" property="activeStatus"/>
+        <result column="last_online_time" jdbcType="TIMESTAMP" property="lastOnlineTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="dev_host" jdbcType="VARCHAR" property="devHost"/>
+        <result column="dev_port" jdbcType="VARCHAR" property="devPort"/>
+    </resultMap>
+    <resultMap id="ProResultMap" extends="BaseResultMap"
+               type="com.bytecub.common.domain.dto.response.device.DevicePageResDto">
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="node_type" jdbcType="VARCHAR" property="nodeType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, device_code, device_name, gw_dev_code, product_code, del_flag, enable_status,
+    active_status, create_time, update_time,device_secret,firmware_version,dev_host, dev_port,
+    CASE WHEN last_online_time = '1980-01-01 00:00:00' THEN NULL ELSE last_online_time END AS last_online_time
+  </sql>
+
+    <select id="selectByCode" parameterType="java.lang.String" resultMap="ProResultMap">
+        select
+        td.*, tp.product_name, tp.node_type
+        from t_device td
+        left join t_product tp on td.product_code = tp.product_code
+        where td.del_flag = 0
+        and td.device_code = #{deviceCode,jdbcType=VARCHAR}
+        limit 1
+    </select>
+    <update id="updateByCode" parameterType="com.bytecub.mdm.dao.po.DevicePo">
+        update t_device
+        <set>
+            <if test="deviceName != null">
+                device_name = #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="gwDevCode != null">
+                gw_dev_code = #{gwDevCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                product_code = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="enableStatus != null">
+                enable_status = #{enableStatus,jdbcType=INTEGER},
+            </if>
+            <if test="activeStatus != null">
+                active_status = #{activeStatus,jdbcType=INTEGER},
+            </if>
+            <if test="lastOnlineTime != null">
+                last_online_time = #{lastOnlineTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deviceSecret != null">
+                device_secret = #{deviceSecret,jdbcType=VARCHAR},
+            </if>
+            <if test=" firmwareVersion != null">
+                firmware_version = #{firmwareVersion,jdbcType=VARCHAR},
+            </if>
+            <if test=" devHost != null">
+                dev_host = #{devHost,jdbcType=VARCHAR},
+            </if>
+            <if test=" devPort != null">
+                dev_port = #{devPort,jdbcType=INTEGER},
+            </if>
+        </set>
+        where device_code = #{deviceCode,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="batchInsert" parameterType="com.bytecub.common.domain.dto.request.device.DevCreateReqDto">
+        insert into t_device
+        (
+        device_code, device_name, gw_dev_code, product_code, device_secret
+        )
+        values
+        <foreach collection="batchList" item="item" separator=",">
+            (
+            #{item.deviceCode, jdbcType=VARCHAR},#{item.deviceName, jdbcType=VARCHAR},
+            #{item.gwDevCode, jdbcType=VARCHAR}, #{item.productCode, jdbcType=VARCHAR},
+            #{item.deviceSecret, jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="countByPage" resultType="java.lang.Long">
+        select
+        count(td.id)
+        from t_device td
+        left join t_product tp on td.product_code = tp.product_code
+        where td.del_flag = 0
+        <if test="item.deviceCode != null">
+            AND td.device_code like CONCAT(CONCAT('%',#{item.deviceCode},'%'))
+        </if>
+        <if test="item.deviceName != null">
+            AND td.device_name like CONCAT(CONCAT('%',#{item.deviceName},'%'))
+        </if>
+        <if test="item.gwDevCode != null">
+            AND td.gw_dev_code = #{item.gwDevCode,jdbcType=VARCHAR}
+        </if>
+        <if test="item.productCode != null">
+            AND td.product_code = #{item.productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="item.enableStatus != null">
+            AND td.enable_status = #{item.enableStatus,jdbcType=INTEGER}
+        </if>
+        <if test="item.activeStatus != null">
+            AND td.active_status = #{item.activeStatus,jdbcType=INTEGER}
+        </if>
+        <if test="item.nodeType != null">
+            AND tp.node_type = #{item.nodeType,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="queryByPage" resultMap="ProResultMap">
+        select
+        td.*, tp.product_name, tp.node_type
+        from t_device td
+        left join t_product tp on td.product_code = tp.product_code
+        where td.del_flag = 0
+        <if test="item.deviceCode != null">
+            AND td.device_code like CONCAT(CONCAT('%',#{item.deviceCode},'%'))
+        </if>
+        <if test="item.deviceName != null">
+            AND td.device_name like CONCAT(CONCAT('%',#{item.deviceName},'%'))
+        </if>
+        <if test="item.gwDevCode != null">
+            AND td.gw_dev_code = #{item.gwDevCode,jdbcType=VARCHAR}
+        </if>
+        <if test="item.productCode != null">
+            AND td.product_code = #{item.productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="item.enableStatus != null">
+            AND td.enable_status = #{item.enableStatus,jdbcType=INTEGER}
+        </if>
+        <if test="item.activeStatus != null">
+            AND td.active_status = #{item.activeStatus,jdbcType=INTEGER}
+        </if>
+        <if test="item.nodeType != null">
+            AND tp.node_type = #{item.nodeType,jdbcType=VARCHAR}
+        </if>
+        order by id DESC
+        limit #{startId,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectByIds" resultMap="ProResultMap">
+        select
+        td.*, tp.product_name, tp.node_type
+        from t_device td
+        left join t_product tp on td.product_code = tp.product_code
+        where td.id IN
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="batchEnableById" >
+    update t_device
+    set enable_status = 1
+    WHERE id IN
+    <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+</update>
+    <update id="batchDisableById" >
+        update t_device
+        set enable_status = 0
+        WHERE id IN
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="batchOnlineByCode" >
+        update t_device
+        set active_status = 1
+        WHERE device_code IN
+        <foreach collection="list" item="deviceCode" index="index" open="(" close=")" separator=",">
+            #{deviceCode}
+        </foreach>
+    </update>
+
+    <update id="batchOfflineByCode" >
+        update t_device
+        set active_status = 0
+        WHERE device_code IN
+        <foreach collection="list" item="deviceCode" index="index" open="(" close=")" separator=",">
+            #{deviceCode}
+        </foreach>
+    </update>
+    <update id="batchDeleteById" >
+        update t_device
+        set del_flag = 1
+        ,  device_code =  concat(device_code,update_time )
+        WHERE id IN
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="mapGateway" >
+        update t_device
+        set  gw_dev_code =  #{gwDevCode, jdbcType=VARCHAR}
+        WHERE device_code IN
+        <foreach collection="devices" item="deviceCode" index="index" open="(" close=")" separator=",">
+            #{deviceCode, jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+
+</mapper>

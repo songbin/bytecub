@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bytecub.mdm.dao.dal.ProductFuncPoMapper">
+    <resultMap id="BaseResultMap" type="com.bytecub.mdm.dao.po.ProductFuncPo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="product_code" jdbcType="VARCHAR" property="productCode"/>
+        <result column="func_name" jdbcType="VARCHAR" property="funcName"/>
+        <result column="identifier" jdbcType="VARCHAR" property="identifier"/>
+        <result column="func_type" jdbcType="VARCHAR" property="funcType"/>
+        <result column="data_type" jdbcType="VARCHAR" property="dataType"/>
+        <result column="data_define" jdbcType="VARCHAR" property="dataDefine"/>
+        <result column="wr_type" jdbcType="INTEGER" property="wrType"/>
+        <result column="func_status" jdbcType="INTEGER" property="funcStatus"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="func_desc" jdbcType="VARCHAR" property="funcDesc"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
+        <result column="attr" jdbcType="VARCHAR" property="attr"/>
+        <result column="event_type" jdbcType="VARCHAR" property="eventType"/>
+        <result column="async" jdbcType="INTEGER" property="async"/>
+        <result column="input_param" jdbcType="VARCHAR" property="inputParam"/>
+        <result column="output_param" jdbcType="VARCHAR" property="outputParam"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, product_code, func_name, identifier, func_type, data_type, data_define, wr_type,
+    func_status, del_flag, create_time, update_time, create_by,func_desc,unit,unit_name,
+    attr,event_type,async,input_param, output_param
+  </sql>
+
+
+
+
+
+    <update id="updateByIdentifier" parameterType="com.bytecub.mdm.dao.po.ProductFuncPo">
+        update t_product_func
+        <set>
+            <if test="async != null">
+                async = #{async,jdbcType=INTEGER},
+            </if>
+            <if test="productCode != null">
+                product_code = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="funcName != null">
+                func_name = #{funcName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataType != null">
+                data_type = #{dataType,jdbcType=VARCHAR},
+            </if>
+            <if test="dataDefine != null">
+                data_define = #{dataDefine,jdbcType=VARCHAR},
+            </if>
+            <if test="wrType != null">
+                wr_type = #{wrType,jdbcType=INTEGER},
+            </if>
+            <if test="funcStatus != null">
+                func_status = #{funcStatus,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="funcDesc != null">
+                func_desc = #{funcDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null">
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="attr != null">
+                attr = #{attr,jdbcType=VARCHAR},
+            </if>
+            <if test="eventType != null">
+                event_type = #{eventType,jdbcType=VARCHAR},
+            </if>
+            <if test="inputParam != null">
+                input_param = #{inputParam,jdbcType=VARCHAR},
+            </if>
+            <if test="outputParam != null">
+                output_param = #{outputParam,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where identifier = #{identifier,jdbcType=VARCHAR}
+        and func_type = #{funcType,jdbcType=VARCHAR}
+    </update>
+
+
+
+    <select id="queryByUnion"  parameterType="com.bytecub.mdm.dao.po.ProductFuncPo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product_func
+        where
+        1 = 1
+        <if test="async != null">
+            AND async = #{async,jdbcType=INTEGER}
+        </if>
+      <if test="productCode != null">
+       AND product_code = #{productCode,jdbcType=VARCHAR}
+      </if>
+      <if test="funcName != null">
+        AND func_name = #{funcName,jdbcType=VARCHAR}
+      </if>
+      <if test="identifier != null">
+        AND identifier = #{identifier,jdbcType=VARCHAR}
+      </if>
+      <if test="funcType != null">
+        AND func_type = #{funcType,jdbcType=VARCHAR}
+      </if>
+      <if test="dataType != null">
+        AND data_type = #{dataType,jdbcType=VARCHAR}
+      </if>
+      <if test="dataDefine != null">
+        AND data_define = #{dataDefine,jdbcType=VARCHAR}
+      </if>
+      <if test="wrType != null">
+        AND wr_type = #{wrType,jdbcType=INTEGER}
+      </if>
+      <if test="funcStatus != null">
+        AND func_status = #{funcStatus,jdbcType=INTEGER}
+      </if>
+      <if test="delFlag != null">
+        AND del_flag = #{delFlag,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        AND update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createBy != null">
+        AND create_by = #{createBy,jdbcType=BIGINT}
+      </if>
+        <if test="eventType != null">
+            AND event_type = #{eventType,jdbcType=BIGINT}
+        </if>
+      order by id desc
+    </select>
+
+</mapper>

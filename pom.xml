@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bytecub</groupId>
+    <artifactId>bytecub</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <modules>
+        <module>bytecub-application</module>
+        <module>bytecub-mqtt</module>
+        <module>bytecub-gateway</module>
+        <module>bytecub-common</module>
+        <module>bytecub-mdm</module>
+        <module>bytecub-protocol</module>
+        <module>bytecub-storage</module>
+        <module>bytecub-plugin</module>
+        <module>bytecub-manager</module>
+        <module>bytecub-utils</module>
+        <module>bytecub-open-api</module>
+        <module>bytecub-job</module>
+    </modules>
+
+    <properties>
+        <disable.checks>false</disable.checks>
+        <bytecub.version>1.0.0</bytecub.version>
+        <jdk.version>1.8</jdk.version>
+        <main.basedir>${basedir}</main.basedir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<!--        <elasticsearch.version>7.4.0</elasticsearch.version>-->
+        <spring.boot.version>2.3.6.RELEASE</spring.boot.version>
+        <spring-cloud-contract.version>2.0.0.RELEASE</spring-cloud-contract.version>
+        <spring-javaformat.version>0.0.6</spring-javaformat.version>
+        <mybatisplus.version>3.4.1</mybatisplus.version>
+        <tk.mybatis.version>2.1.5</tk.mybatis.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.6.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-sleuth -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <version>2.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId> <!-- Use 'netty-all' for 4.0 or above -->
+            <version>4.1.56.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

@@ -1,0 +1,68 @@
+<configuration scan="true" scanPeriod="60 seconds">	  <!-- Auto Scan config file  -->
+	<property resource="application.properties" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    	<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      		<level>INFO</level>
+    	</filter>
+    	<encoder>
+      		<pattern>${PATTERN}</pattern>
+    	</encoder>
+    </appender>
+
+
+    <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<file>${errorLogPath}</file>
+    	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    		<fileNamePattern>${errorLogPath}.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>2</maxHistory>
+    	</rollingPolicy>
+    	<encoder>
+			<pattern>${PATTERN}</pattern>
+    	</encoder>
+    	<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      		<level>warn</level>		<!-- only log warn/error msg -->
+    	</filter>
+    </appender>
+
+	<appender name="NORMAL_LOG"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${normalLogPath}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${normalLogPath}.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>2</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      		<level>INFO</level>
+    	</filter>
+	</appender>
+
+    <!-- #################################################################### -->
+
+    <root level="INFO">				<!-- level=trace/debug/info/warn/error/all/off -->
+    	<appender-ref ref="STDOUT" />
+    	<appender-ref ref="ERROR_LOG" />
+    	<appender-ref ref="NORMAL_LOG" />
+  	</root>
+
+
+  	<logger name="foo.bar" additivity="false">		<!-- only output to NORMAL_LOG -->
+  		<appender-ref ref="NORMAL_LOG" />
+  	</logger>
+	<logger name="com.ibatis" level="debug"/>
+	<logger name="com.ibatis.common.jdbc.SimpleDataSource" level="debug"/>
+	<logger name="com.ibatis.common.jdbc.ScriptRunner" level="debug"/>
+	<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="debug"/>
+
+    <logger name="org.springframework" level="INFO"/>
+
+	<!--<root level="DEBUG">-->
+		<!--<appender-ref ref="logfile"/>-->
+		<!--<appender-ref ref="stdout"/>-->
+	<!--</root>-->
+
+</configuration>
