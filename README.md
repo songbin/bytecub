@@ -1,9 +1,13 @@
 # ByteCub IoT platform
+#### 更新说明
+最新代码在码云,github只是最初版本.   
+码云地址: [https://gitee.com/byte-cub/bytecub](https://gitee.com/byte-cub/bytecub)
 #### 文档地址
- [http://doc.bytecub.cn](http://doc.bytecub.cn)
+ [https://docs.qq.com/doc/DQU9qaGx0UlZhQWhS](https://docs.qq.com/doc/DQU9qaGx0UlZhQWhS)
 #### PC WEB管理后台地址
-管理后台: [demo.bytecub.cn](http://demo.bytecub.cn)  
-演示帐号: demo/123456
+~~管理后台: [demo.bytecub.cn](http://demo.bytecub.cn)    
+演示帐号: demo/123456~~    
+演示服务器无资金续费已经停了
 
 #### 前端代码地址
 前端代码地址: [https://gitee.com/byte-cub/bytecub-manager-ui](https://gitee.com/byte-cub/bytecub-manager-ui)
@@ -21,8 +25,7 @@
 
 #### 压测结果 
 使用阿里云2核4G，单机部署情况下支持每秒5K条消息上报，数据无积压，cpu负载最高40%
-### 联系方式  
-(**我们的团队承接定制化服务，欢迎大家垂询相关事宜**)  
+### 联系方式   
 ![](./docs/images/wechat.jpg)  
 扫描二维码，加好友进交流群
 
@@ -55,7 +58,7 @@ docs/db 目录下，执行sql文件，初始帐号密码admin/123456。
   </pre>
 ### 使用说明
 
-请移步至 [doc.bytecub.cn](http://doc.bytecub.cn)
+请移步至 [https://docs.qq.com/doc/DQU9qaGx0UlZhQWhS](https://docs.qq.com/doc/DQU9qaGx0UlZhQWhS)
 
 ### 部分截图
 ![](./docs/images/product.jpg)
